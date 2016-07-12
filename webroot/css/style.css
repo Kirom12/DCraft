@@ -38,7 +38,15 @@ form {
 }
 
 #form-craft button{
-	margin: 5px 5px;
+	margin: 5px 0px;
+}
+#form-craft button:last-of-type{
+	margin: 5px 10px;
+}
+#form-craft #semi-auto {
+	margin-left: -8px;
+
+	border-left: 1px solid #000;
 }
 
 /* OTHER
