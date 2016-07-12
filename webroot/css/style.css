@@ -7,7 +7,7 @@ h2 {
 }
 
 form {
-	margin: 20px 0;
+	margin: 10px 0;
 }
 
 /* HEADER
@@ -24,14 +24,21 @@ form {
 
 }
 
-#craft .table {
+#craft .table, #craft .duration {
 	text-align: left;
 }
-
 
 /* Form */
 .input-text{
 	padding: 5px;
+}
+
+.form-group {
+	margin-top: 5px;
+}
+
+#form-craft button{
+	margin: 5px 5px;
 }
 
 /* OTHER
@@ -47,5 +54,11 @@ a:focus{
 @media screen and (min-width: 768px) {
 	.input-text{
 		max-width: 60px;
+	}
+
+	#craft .alert {
+		width: 500px;
+
+		margin: 0 auto;
 	}
 }

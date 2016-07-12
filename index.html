@@ -20,45 +20,59 @@
 					<h2>Artisanat</h2>
 					
 					<form name="formCraft" id="form-craft" class="form-inline" action="#" method="post">
-						<label class="sr-only" for="result">Jet</label>
-						<div class="input-group">
-							<div class="input-group-addon">Jet</div>
-							<input type="text" class="form-control input-text" id="result"  maxlength="2" autofocus/>
+						<div class="form-group">
+							<label class="sr-only" for="result">Jet</label>
+							<div class="input-group">
+								<div class="input-group-addon">Jet</div>
+								<input type="text" class="form-control input-text" id="result"  maxlength="2" autofocus/>
+							</div>
+							<label class="sr-only" for="dd">DD</label>
+							<div class="input-group">
+								<div class="input-group-addon">DD</div>
+								<input type="text" class="form-control input-text" id="dd" maxlength="2"/>
+							</div>
+							<label class="sr-only" for="Price">Progres</label>
+							<div class="input-group">
+								<div class="input-group-addon">Progres</div>
+								<input type="text" class="form-control input-text" id="price" value="0"/>
+								<div class="input-group-addon">PO</div>
+							</div>
+							<label class="sr-only" for="Price">Prix</label>
+							<div class="input-group">
+								<div class="input-group-addon">Prix</div>
+								<input type="text" class="form-control input-text" id="price"/>
+								<div class="input-group-addon">PO</div>
+							</div>
 						</div>
-						<label class="sr-only" for="dd">DD</label>
-						<div class="input-group">
-							<div class="input-group-addon">DD</div>
-							<input type="text" class="form-control input-text" id="dd" maxlength="2"/>
+						<div class="form-group">
+							<div class="radio">
+								<label>
+									<input type="radio" name="opTime" id="optTime1" value="1"/>
+	    							Semaine
+								</label>
+								<label>
+									<input type="radio" name="opTime" id="optTime2" value="2" checked/>
+	    							Jour
+								</label>
+								<label>
+									<input type="radio" name="opTime" id="optTime3" value="3"/>
+	    							Heure
+								</label>
+							</div>
+							<select name="modifier" id="modifier" class="form-control">
+								<option value="1">x1</option>
+								<option value="1.5">x1.5</option>
+								<option value="2">x2</option>
+								<option value="3">x3</option>
+								<option value="4">x4</option>
+								<option value="5">x5</option>
+							</select>
+							<button type="submit" class="btn btn-primary">Valider</button>
+							<button type="button" id="refresh" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i></button>
 						</div>
-						<label class="sr-only" for="Price">Progres</label>
-						<div class="input-group">
-							<div class="input-group-addon">Progres</div>
-							<input type="text" class="form-control input-text" id="price" value="0"/>
-							<div class="input-group-addon">PO</div>
-						</div>
-						<label class="sr-only" for="Price">Prix</label>
-						<div class="input-group">
-							<div class="input-group-addon">Prix</div>
-							<input type="text" class="form-control input-text" id="price"/>
-							<div class="input-group-addon">PO</div>
-						</div>
-						<div class="radio">
-							<label>
-								<input type="radio" name="opTime" id="optTime1" value="1"/>
-    							Semaines
-							</label>
-							<label>
-								<input type="radio" name="opTime" id="optTime2" value="2" checked/>
-    							Jours
-							</label>
-							<label>
-								<input type="radio" name="opTime" id="optTime3" value="3"/>
-    							Heures
-							</label>
-						</div>
-						<button type="submit" class="btn btn-primary">Valider</button>
 					</form>
-
+					<div class="duration">
+					</div>
 					<table class="table table-striped">
 						<thead>
 							<tr>

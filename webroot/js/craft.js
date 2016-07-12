@@ -1,6 +1,6 @@
 //Variables'global'
 var count = 0;
-var time;
+var durationHours = 0;
 // Can be less for faster !
 var modifierNb = 10;
 
@@ -8,37 +8,49 @@ var modifierNb = 10;
 $(function() {
 	$('form').submit(false);
 
+	// Form submit
 	$('#form-craft').submit(function(e){
 		e.preventDefault();
 
 		craft();
+	});
+
+	// Reset form
+	$('#refresh').on('click', function() {
+		reset();
 	});
 });
 
 //Function crafting
 function craft(){
 	if(checkForm('#form-craft')) {
-		var dice = parseInt($('#form-craft').find('input').eq(0).val());
-		var dd = parseInt($('#form-craft').find('input').eq(1).val());
-		var progress = parseFloat($('#form-craft').find('input').eq(2).val());
-		var price = parseInt($('#form-craft').find('input').eq(3).val());
+		var dice = parseInt($('#form-craft input').eq(0).val());
+		var dd = parseInt($('#form-craft input').eq(1).val());
+		var progress = parseFloat($('#form-craft input').eq(2).val());
+		var price = parseInt($('#form-craft input').eq(3).val());
 		var time = $('input[name=opTime]:checked', '#form-craft').val();
+		var multiplicator = parseFloat($('#form-craft select').val());
 		var modifier;
+
+		console.log(multiplicator);
 
 		count++;
 
 		switch(parseInt(time)) {
 			case 1:
 				modifier = modifierNb;
-				time = 'Semaines';
+				time = 'Semaine';
+				durationHours += 56;
 				break;
 			case 2:
 				modifier = modifierNb*10;
-				time = 'Jours'
+				time = 'Jour'
+				durationHours += 8;
 				break;
 			case 3:
 				modifier = (modifierNb*10)*8;
-				time = 'Heures';
+				time = 'Heure';
+				durationHours += 1;
 				break;
 			default:
 		}
@@ -46,9 +58,9 @@ function craft(){
 		if (dice >= dd) {
 			// Success
 			// Calcul progression
-			var progressStep = round((dice*dd)/modifier, 2);
+			var progressStep = round(((dice*dd)/modifier)*multiplicator, 2);
 			var progressTotal = round(progress+progressStep, 2);
-			$('#form-craft').find('input').eq(2).val(progressTotal);
+			$('#form-craft input').eq(2).val(progressTotal);
 
 			var rowClass = 'success';
 		}
@@ -61,10 +73,33 @@ function craft(){
 		}
 		// Insert result in the table
 		$('#craft table tbody').prepend('<tr class="'+rowClass+'"><th scope="row">'+count+'</th><td>'+time+'</td><td>'+dice+'</td><td>'+dd+'</td><td>'+progressStep+'</td><td>'+progressTotal+'</td></tr>');
+		
+		// Calculation of the duration time in Week, day, hours.
+		// And insert duration
+		if (progressTotal >= price) {
+			// Display in Alert
+			$('#craft .duration').html('<div class="alert alert-success" alert="alert"><b>Craft terminée ! </b>'+Math.floor(durationHours/56)+' semaine(s) '+Math.floor((durationHours%56)/8)+' jour(s) '+Math.floor((durationHours%56)%8)+' heure(s)</div>');
+		} else {
+			$('#craft .duration').html('<b>Durée : </b>'+Math.floor(durationHours/56)+' semaine(s) '+Math.floor((durationHours%56)/8)+' jour(s) '+Math.floor((durationHours%56)%8)+' heure(s)');
+		}
 
-		$('#form-craft').find('input').eq(0).val('');
-		$('#form-craft').find('input').eq(0).focus();
+
+		$('#form-craft input').eq(0).val('');
+		$('#form-craft input').eq(0).focus();
 	}
+}
+
+function reset() {
+	for (var i = 4 - 1; i >= 0; i--) {
+		$('#form-craft input').eq(i).val('');
+	}
+	$('#form-craft input').eq(2).val('0');
+
+	$('#craft table tbody').html('');
+	$('#craft .duration').html('');
+	$('#form-craft select').val('1');
+
+	$('#form-craft input').eq(0).focus();
 }
 
 /**
