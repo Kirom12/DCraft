@@ -1,0 +1,51 @@
+/* COMMON
+------------------------- */
+
+h2 {
+	font-size: 1.8em;
+	text-align: center;
+}
+
+form {
+	margin: 20px 0;
+}
+
+/* HEADER
+------------------------- */
+
+.nav-tabs{
+	margin-bottom: 0px;
+}
+
+/* CONTENT
+------------------------- */
+
+.tab-content{
+
+}
+
+#craft .table {
+	text-align: left;
+}
+
+
+/* Form */
+.input-text{
+	padding: 5px;
+}
+
+/* OTHER
+------------------------- */
+
+a:focus{
+	outline: none;
+}
+
+/* MEDIA
+------------------------- */
+
+@media screen and (min-width: 768px) {
+	.input-text{
+		max-width: 60px;
+	}
+}

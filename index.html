@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<title>DCraft - Craft pour D&D 3.5</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link href="webroot/css/bootstrap.min.css" rel="stylesheet">
+		<link href="webroot/css/style.css" rel="stylesheet">
+	</head>
+	<body>
+	    <div class="container">
+	    	<ul id="tab-menu" class="nav nav-tabs">
+				<li class="active"><a href="#craft" aria-controles="craft" data-toggle="tab">Artisanat</a></li>
+			</ul>
+			
+			<div class="tab-content">
+				<div class="tab-pane text-center active" id="craft">
+					<h2>Artisanat</h2>
+					
+					<form name="formCraft" id="form-craft" class="form-inline" action="#" method="post">
+						<label class="sr-only" for="result">Jet</label>
+						<div class="input-group">
+							<div class="input-group-addon">Jet</div>
+							<input type="text" class="form-control input-text" id="result"  maxlength="2" autofocus/>
+						</div>
+						<label class="sr-only" for="dd">DD</label>
+						<div class="input-group">
+							<div class="input-group-addon">DD</div>
+							<input type="text" class="form-control input-text" id="dd" maxlength="2"/>
+						</div>
+						<label class="sr-only" for="Price">Progres</label>
+						<div class="input-group">
+							<div class="input-group-addon">Progres</div>
+							<input type="text" class="form-control input-text" id="price" value="0"/>
+							<div class="input-group-addon">PO</div>
+						</div>
+						<label class="sr-only" for="Price">Prix</label>
+						<div class="input-group">
+							<div class="input-group-addon">Prix</div>
+							<input type="text" class="form-control input-text" id="price"/>
+							<div class="input-group-addon">PO</div>
+						</div>
+						<div class="radio">
+							<label>
+								<input type="radio" name="opTime" id="optTime1" value="1"/>
+    							Semaines
+							</label>
+							<label>
+								<input type="radio" name="opTime" id="optTime2" value="2" checked/>
+    							Jours
+							</label>
+							<label>
+								<input type="radio" name="opTime" id="optTime3" value="3"/>
+    							Heures
+							</label>
+						</div>
+						<button type="submit" class="btn btn-primary">Valider</button>
+					</form>
+
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>n°</th>
+								<th>durée</th>
+								<th>Jet</th>
+								<th>DD</th>
+								<th>Progress</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+	    	</div>
+	    </div>	
+		<script type="text/javascript" src="webroot/js/jquery.js"></script>
+		<script type="text/javascript" src="webroot/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="webroot/js/craft.js"></script>
+	</body>
+</html> 
