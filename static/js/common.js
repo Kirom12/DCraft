@@ -84,10 +84,10 @@ function d20() {
  *	Sort a table on the second index
  */
 function sortInitiative(a, b) {
-	if (a[1] === b[1]) {
+	if (a[2] === b[2]) {
     	return 0;
 	}
 	else {
-    	return (a[1] < b[1]) ? -1 : 1;
+    	return (a[2] < b[2]) ? -1 : 1;
 	}
 }

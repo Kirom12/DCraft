@@ -1,7 +1,7 @@
 /*
  *	@TODO
- *	Add 'dead' button on each line
- *	Add modification pv
+ *	Add notes
+ *	Add second time name
  */
 
 // Global
@@ -9,6 +9,7 @@ var FORM_INI = '#form-ini';
 
 var tableIni = [];
 var currentTurn = 0;
+var idCreature = 0;
 
 // jQuery
 $(function() {
@@ -18,18 +19,10 @@ $(function() {
 		e.preventDefault();
 
 		initiative();
+		setKey();
 
-		$(document).off('keydown').on('keydown', function(e) {
-			var focus = $('input').is(':focus');
-			if (e.which == 78 && !focus) {
-				currentTurn++;
-				setTurn();
-				console.log('next');
-			}
-			if (e.which == 66 && !focus) {
-				currentTurn--;
-				setTurn(true);
-			}
+		$('.input-hp').change(function() {
+			setHP(this);
 		});
 	});
 
@@ -72,24 +65,31 @@ function initiative() {
 		var numberOccurence = 1;
 
 		for (var i = tableIni.length - 1; i >= 0; i--) {
-			if (tableIni[i][0].substring(0, tableIni[i][0].lastIndexOf(' ')) == name) {
+			if (tableIni[i][1].substring(0, tableIni[i][1].lastIndexOf(' ')) == name) {
 				numberOccurence++;
 			}
 		}
 		name += (numberOccurence === 1) ? ' <i>1</i>' : ' '+numberOccurence;
 
-		tableIni.push([name,initiative,ca,maxHp]);
+		// Add creature to the list
+		tableIni.push([idCreature,name,initiative,ca,maxHp,maxHp]);
 
+		// Sort all the table
 		tableIni = tableIni.sort(sortInitiative);
 
+		// Display the list
+		var rowClass;
 		var htmlTbody = '';
 		for (var i = tableIni.length-1; i >= 0; i--) {
-			htmlTbody += '<tr><td>'+(tableIni.length-i)+'</td><td>'+tableIni[i][0]+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td><input type="text" class="input-hp" value="'+tableIni[i][3]+'"></td><td>'+tableIni[i][3]+'</td></tr>';
+			// Set danger class if hp < 0
+			rowClass = (tableIni[i][4] < 0) ? ' class="danger"' : '';
+			htmlTbody += '<tr'+rowClass+'><td>'+(tableIni.length-i)+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td>'+tableIni[i][3]+'</td><td><input type="text" class="input-hp" value="'+tableIni[i][4]+'"></td><td>'+tableIni[i][5]+'</td></tr>';
 		}
-
 		$('#initiative table tbody').html(htmlTbody);
 
 		setTurn();
+
+		idCreature++;
 
 		// Don't reset all the form for adding multiples créatures
 		$('#form-ini input').eq(1).val('');
@@ -114,24 +114,74 @@ function resetIniForm() {
 	$('#initiative table tbody').html('');
 	tableIni = [];
 
+	currentTurn = 0;
+	idCreature = 0;
+
 	$('#form-ini input').eq(0).focus();
 }
 
+/*
+ *	Set info class on the current player
+ *
+ *	@param bool reverse Change the direction
+ */
 function setTurn(reverse = false) {
-	var tableColumn = $('#initiative table tbody tr');
-	var tableColumnLength = $(tableColumn).length;
+	var tableRow = $('#initiative table tbody tr');
+	var tableRowLength = $(tableRow).length;
 
 	if (reverse) {
-		$(tableColumn).eq(currentTurn+1).removeClass('info');
+		$(tableRow).eq(currentTurn+1).removeClass('info');
 	} else {
-		$(tableColumn).eq(currentTurn-1).removeClass('info');
+		$(tableRow).eq(currentTurn-1).removeClass('info');
 	}
 
+	// Skip turn if character is down
+	while($(tableRow).eq(currentTurn).find('.input-hp').val() < 0) {
+		if (reverse) {
+			currentTurn--;
+		} else {
+			currentTurn++;
+		}
+	}
+
+	// If round is over
 	if (currentTurn == -1) {
-		currentTurn = tableColumnLength-1;
-	} else if (currentTurn == tableColumnLength) {
+		currentTurn = tableRowLength-1;
+	} else if (currentTurn == tableRowLength) {
 		currentTurn = 0;
 	}
 
-	$(tableColumn).eq(currentTurn).addClass('info');
+	$(tableRow).eq(currentTurn).addClass('info');
+}
+
+/*
+ *	Set key for previous and next turn (B and N)
+ */
+function setKey() {
+	$(document).off('keydown').on('keydown', function(e) {
+		var focus = $('input').is(':focus');
+		if (e.which == 78 && !focus) {
+			currentTurn++;
+			setTurn();
+		}
+		if (e.which == 66 && !focus) {
+			currentTurn--;
+			setTurn(true);
+		}
+	});
+}
+
+function setHP(input) {
+	// Get the position in table
+	var id = $(input).closest('tr').find('td').eq(0).text();
+	id = tableIni.length-id;
+	var hp = $(input).val();
+
+	tableIni[id][4] = hp;
+
+	if(parseInt($(input).val()) < 0) {
+		$(input).closest('tr').addClass('danger');
+	} else {
+		$(input).closest('tr').removeClass('danger');
+	}
 }
