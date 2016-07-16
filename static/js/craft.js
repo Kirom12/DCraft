@@ -1,8 +1,16 @@
 //Variables'global'
+// Can be less for faster !
+var MODIFIER_NB = 10;
+var FORM_CRAFT = '#form-craft';
+var INPUT_CHECK_CRAFT = [0, 1, 2, 3, 4];
+
 var count = 0;
 var durationHours = 0;
-// Can be less for faster !
-var modifierNb = 10;
+
+/*
+ *	@TODO
+ *	Save every craft (in local storage)
+ */
 
 //jQuery
 $(function() {
@@ -16,7 +24,7 @@ $(function() {
 
 	// Reset form
 	$('#refresh').on('click', function() {
-		reset();
+		resetCraftForm();
 	});
 
 	// Automatic craft
@@ -31,8 +39,8 @@ $(function() {
 });
 
 //Function crafting
-function craft(){
-	if(checkForm('#form-craft')) {
+function craft() {
+	if(checkForm(FORM_CRAFT, 'int', INPUT_CHECK_CRAFT)) {
 		var dice = parseInt($('#form-craft input').eq(0).val());
 		var bonus = parseInt($('#form-craft input').eq(1).val());
 		var dd = parseInt($('#form-craft input').eq(2).val());
@@ -47,17 +55,17 @@ function craft(){
 
 		switch(parseInt(time)) {
 			case 1:
-				modifier = modifierNb;
+				modifier = MODIFIER_NB;
 				time = 'Semaine';
 				durationHours += 56;
 				break;
 			case 2:
-				modifier = modifierNb*10;
+				modifier = MODIFIER_NB*10;
 				time = 'Jour'
 				durationHours += 8;
 				break;
 			case 3:
-				modifier = (modifierNb*10)*8;
+				modifier = (MODIFIER_NB*10)*8;
 				time = 'Heure';
 				durationHours += 1;
 				break;
@@ -105,16 +113,16 @@ function craft(){
 function autoCraft(fullAuto = true) {
 	var craftFinish = false;
 
-	do {
-		var d20 = round(Math.random()*(20 - 1)+1, 0);
+	if (checkForm(FORM_CRAFT, 'int',[1, 2, 3, 4])) {
+		do {
+			$('#form-craft input').eq(0).val(d20());
 
-		$('#form-craft input').eq(0).val(d20);
-
-		craftFinish = craft();
-	} while (!craftFinish && fullAuto);
+			craftFinish = craft();
+		} while (!craftFinish && fullAuto);
+	}
 }
 
-function reset() {
+function resetCraftForm() {
 	$('#form-craft input').eq(0).val('');
 	$('#form-craft input').eq(3).val('0');
 	$('#form-craft select').val('1');
@@ -126,39 +134,4 @@ function reset() {
 
 	durationHours = 0;
 	count = 0;
-}
-
-/**
- *	Function for forms checking. Color input.
- *
- *	@param form Form who need to be check
- *	@return bool inputOk return true if all field are completed
- */
-function checkForm(form){
-	var inputOk = true;
-
-	for (var i = 5; i >= 0; i--) {
-		var input = $(form).find('input').eq(i);
-
-		if (input.val() == "" || isNaN(input.val()))
-		{
-			input.parent().addClass('has-error');
-			input.focus();
-			inputOk = false;
-		}
-		else
-		{
-			input.parent().removeClass('has-error');
-		}
-
-	};
-
-	return inputOk;
-}
-
-/*
- *	Round a number
- */
-function round(value, decimals) {
-	return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }

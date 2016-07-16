@@ -24,7 +24,7 @@ form {
 
 }
 
-#craft .table, #craft .duration {
+.table, #craft .duration {
 	text-align: left;
 }
 
@@ -62,6 +62,9 @@ a:focus{
 @media screen and (min-width: 768px) {
 	.input-text{
 		max-width: 60px;
+	}
+	.input-text-small{
+		max-width: 50px;
 	}
 
 	#craft .alert {
