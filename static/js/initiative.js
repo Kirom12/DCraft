@@ -1,3 +1,10 @@
+/*
+ *	@TODO
+ *	Add reset button
+ *	Add 'dead' button on each line
+ *	Add 'next turn' button and key
+ */
+
 // Global
 var FORM_INI = '#form-ini';
 
@@ -14,6 +21,9 @@ $(function() {
 	});
 });
 
+/*
+ *	Get inputs, calculate initiative, sort and display in a html table
+ */
 function initiative() {
 	// Require name AND roll OR bonus initiative
 	if ((checkForm(FORM_INI, 'string',[0]))) {
@@ -45,7 +55,6 @@ function initiative() {
 
 		tableIni = tableIni.sort(sortInitiative);
 
-		//$('#initiative table tbody').prepend('<tr><td>0</td><td>'+name+'</td><td>'+initiative+'</td><td>'+ca+'</td><td>'+maxHp+'</td><td>'+maxHp+'</td></tr>');
 		var htmlTbody;
 		for (var i = tableIni.length-1; i >= 0; i--) {
 			htmlTbody += '<tr><td>'+(i+1)+'</td><td>'+tableIni[i][0]+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td>'+tableIni[i][3]+'</td><td>'+tableIni[i][3]+'</td><tr/>';
@@ -53,15 +62,22 @@ function initiative() {
 
 		$('#initiative table tbody').html(htmlTbody);
 
+		// Don't reset all the form for adding multiples créatures
 		$('#form-ini input').eq(1).val('');
 		$('#form-ini input').eq(1).focus();
 	}
 }
 
+/*
+ *	Set value in roll input
+ */
 function autoInitiative() {
 	$('#form-ini input').eq(1).val(d20());
 }
 
+/*
+ *	Sort a table on the second index
+ */
 function sortInitiative(a, b) {
 	if (a[1] === b[1]) {
     	return 0;

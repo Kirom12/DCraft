@@ -1,3 +1,8 @@
+/*
+ *	@TODO
+ *	Save every craft (in local storage)
+ */
+
 //Variables'global'
 // Can be less for faster !
 var MODIFIER_NB = 10;
@@ -6,11 +11,6 @@ var INPUT_CHECK_CRAFT = [0, 1, 2, 3, 4];
 
 var count = 0;
 var durationHours = 0;
-
-/*
- *	@TODO
- *	Save every craft (in local storage)
- */
 
 //jQuery
 $(function() {
@@ -38,7 +38,11 @@ $(function() {
 	});
 });
 
-//Function crafting
+/*
+ *	Get inputs and calcul progression and add line in html table
+ *
+ *	@return bool Craft finish
+ */
 function craft() {
 	if(checkForm(FORM_CRAFT, 'int', INPUT_CHECK_CRAFT)) {
 		var dice = parseInt($('#form-craft input').eq(0).val());
@@ -110,6 +114,11 @@ function craft() {
 	}
 }
 
+/*
+ *	Call craft function until the craft ends
+ *
+ *	@param bool fullauto Call craft() once or until the craft ends
+ */
 function autoCraft(fullAuto = true) {
 	var craftFinish = false;
 
@@ -122,6 +131,9 @@ function autoCraft(fullAuto = true) {
 	}
 }
 
+/*
+ *	Reset craft form
+ */
 function resetCraftForm() {
 	$('#form-craft input').eq(0).val('');
 	$('#form-craft input').eq(3).val('0');
