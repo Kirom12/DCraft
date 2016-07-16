@@ -4,7 +4,6 @@
  */
 
 //Variables'global'
-// Can be less for faster !
 var MODIFIER_NB = 10;
 var FORM_CRAFT = '#form-craft';
 var INPUT_CHECK_CRAFT = [0, 1, 2, 3, 4];
@@ -23,7 +22,7 @@ $(function() {
 	});
 
 	// Reset form
-	$('#refresh').on('click', function() {
+	$('#refresh-craft').on('click', function() {
 		resetCraftForm();
 	});
 

@@ -73,7 +73,21 @@ function round(value, decimals) {
 	return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }
 
-// Return number between 1 and 20
+/*
+ *	Return number between 1 and 20
+ */
 function d20() {
 	return round(Math.random()*(20 - 1)+1, 0);
+}
+
+/*
+ *	Sort a table on the second index
+ */
+function sortInitiative(a, b) {
+	if (a[1] === b[1]) {
+    	return 0;
+	}
+	else {
+    	return (a[1] < b[1]) ? -1 : 1;
+	}
 }

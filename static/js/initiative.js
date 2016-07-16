@@ -1,14 +1,14 @@
 /*
  *	@TODO
- *	Add reset button
  *	Add 'dead' button on each line
- *	Add 'next turn' button and key
+ *	Add modification pv
  */
 
 // Global
 var FORM_INI = '#form-ini';
 
 var tableIni = [];
+var currentTurn = 0;
 
 // jQuery
 $(function() {
@@ -18,6 +18,33 @@ $(function() {
 		e.preventDefault();
 
 		initiative();
+
+		$(document).off('keydown').on('keydown', function(e) {
+			var focus = $('input').is(':focus');
+			if (e.which == 78 && !focus) {
+				currentTurn++;
+				setTurn();
+				console.log('next');
+			}
+			if (e.which == 66 && !focus) {
+				currentTurn--;
+				setTurn(true);
+			}
+		});
+	});
+
+	$('#refresh-ini').on('click', function() {
+		resetIniForm();
+		$(document).off('keydown');
+	});
+
+	$('#next-turn').on('click', function() {
+		currentTurn++;
+		setTurn();
+	});
+	$('#prev-turn').on('click', function() {
+		currentTurn--;
+		setTurn(true);
 	});
 });
 
@@ -55,16 +82,18 @@ function initiative() {
 
 		tableIni = tableIni.sort(sortInitiative);
 
-		var htmlTbody;
+		var htmlTbody = '';
 		for (var i = tableIni.length-1; i >= 0; i--) {
-			htmlTbody += '<tr><td>'+(i+1)+'</td><td>'+tableIni[i][0]+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td>'+tableIni[i][3]+'</td><td>'+tableIni[i][3]+'</td><tr/>';
+			htmlTbody += '<tr><td>'+(tableIni.length-i)+'</td><td>'+tableIni[i][0]+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td><input type="text" class="input-hp" value="'+tableIni[i][3]+'"></td><td>'+tableIni[i][3]+'</td></tr>';
 		}
 
 		$('#initiative table tbody').html(htmlTbody);
 
+		setTurn();
+
 		// Don't reset all the form for adding multiples créatures
 		$('#form-ini input').eq(1).val('');
-		$('#form-ini input').eq(1).focus();
+		$('#form-ini input').eq(0).focus();
 	}
 }
 
@@ -76,13 +105,33 @@ function autoInitiative() {
 }
 
 /*
- *	Sort a table on the second index
+ *	Reset form and table
  */
-function sortInitiative(a, b) {
-	if (a[1] === b[1]) {
-    	return 0;
+function resetIniForm() {
+	for (var i = 0; i < 5; i++) {
+		$('#form-ini input').eq(i).val('');
 	}
-	else {
-    	return (a[1] < b[1]) ? -1 : 1;
+	$('#initiative table tbody').html('');
+	tableIni = [];
+
+	$('#form-ini input').eq(0).focus();
+}
+
+function setTurn(reverse = false) {
+	var tableColumn = $('#initiative table tbody tr');
+	var tableColumnLength = $(tableColumn).length;
+
+	if (reverse) {
+		$(tableColumn).eq(currentTurn+1).removeClass('info');
+	} else {
+		$(tableColumn).eq(currentTurn-1).removeClass('info');
 	}
+
+	if (currentTurn == -1) {
+		currentTurn = tableColumnLength-1;
+	} else if (currentTurn == tableColumnLength) {
+		currentTurn = 0;
+	}
+
+	$(tableColumn).eq(currentTurn).addClass('info');
 }

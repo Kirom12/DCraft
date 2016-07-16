@@ -12,8 +12,8 @@
 	<body>
 	    <div class="container">
 	    	<ul id="tab-menu" class="nav nav-tabs">
-				<li class="active"><a href="#craft" aria-controles="craft" data-toggle="tab">Artisanat</a></li>
-				<li><a href="#initiative" aria-controles="craft" data-toggle="tab">Initiative</a></li>
+				<li><a href="#craft" aria-controles="craft" data-toggle="tab">Artisanat</a></li>
+				<li  class="active"><a href="#initiative" aria-controles="craft" data-toggle="tab">Initiative</a></li>
 			</ul>
 			
 			<div class="tab-content">
@@ -76,7 +76,7 @@
 							<button type="submit" class="btn btn-primary">Valider</button>
 							<button type="button" id="auto" class="btn btn-primary">Auto</button>
 							<button type="button" id="semi-auto" class="btn btn-primary">S</button>
-							<button type="button" id="refresh" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i></button>
+							<button type="button" id="refresh-craft" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i></button>
 						</div>
 					</form>
 					<div class="duration">
@@ -130,9 +130,12 @@
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary">Valider</button>
+							<button type="button" id="refresh-ini" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i></button>
 						</div>
 					</form>
-
+					
+					<button type="button" id="next-turn" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-right"></i></button>
+					<button type="button" id="prev-turn" class="btn btn-primary"><i class="glyphicon glyphicon-arrow-left"></i></button>
 					<table class="table table-striped">
 						<thead>
 							<tr>
