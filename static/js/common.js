@@ -69,7 +69,7 @@ function getInputValue(form, limit) {
  *	@param Int decimals
  *	@return float
  */
-function round(value, decimals) {
+function roundNb(value, decimals) {
 	return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }
 
@@ -77,7 +77,7 @@ function round(value, decimals) {
  *	Return number between 1 and 20
  */
 function d20() {
-	return round(Math.random()*(20 - 1)+1, 0);
+	return roundNb(Math.random()*(20 - 1)+1, 0);
 }
 
 /*

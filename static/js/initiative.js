@@ -1,15 +1,16 @@
 /*
  *	@TODO
- *	Add notes
  *	Add second time name
+ *	Add possibility to delete a row
  */
 
 // Global
 var FORM_INI = '#form-ini';
 
 var tableIni = [];
+var round = 1;
 var currentTurn = 0;
-var idCreature = 0;
+var idCreature = 0; // not use for now
 
 // jQuery
 $(function() {
@@ -21,8 +22,13 @@ $(function() {
 		initiative();
 		setKey();
 
+		// When modify HP
 		$('.input-hp').change(function() {
 			setHP(this);
+		});
+		// When modify note
+		$('.input-note').change(function() {
+			setNote(this);
 		});
 	});
 
@@ -59,6 +65,7 @@ function initiative() {
 		var bonus = (inputsValues[2] == "") ? 0 : parseInt(inputsValues[2]);
 		var ca = inputsValues[3];
 		var maxHp = inputsValues[4];
+		var note = '';
 		
 		var initiative = roll + bonus;
 
@@ -72,7 +79,7 @@ function initiative() {
 		name += (numberOccurence === 1) ? ' <i>1</i>' : ' '+numberOccurence;
 
 		// Add creature to the list
-		tableIni.push([idCreature,name,initiative,ca,maxHp,maxHp]);
+		tableIni.push([idCreature,name,initiative,ca,maxHp,maxHp, note]);
 
 		// Sort all the table
 		tableIni = tableIni.sort(sortInitiative);
@@ -83,10 +90,12 @@ function initiative() {
 		for (var i = tableIni.length-1; i >= 0; i--) {
 			// Set danger class if hp < 0
 			rowClass = (tableIni[i][4] < 0) ? ' class="danger"' : '';
-			htmlTbody += '<tr'+rowClass+'><td>'+(tableIni.length-i)+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td>'+tableIni[i][3]+'</td><td><input type="text" class="input-hp" value="'+tableIni[i][4]+'"></td><td>'+tableIni[i][5]+'</td></tr>';
+			htmlTbody += '<tr'+rowClass+'><td>'+(tableIni.length-i)+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td>'+tableIni[i][3]+'</td><td><input type="text" class="input-hp" value="'+tableIni[i][4]+'"></td><td>'+tableIni[i][5]+'</td><td><input type="text" class="input-note" value="'+tableIni[i][6]+'"></td></tr>';
 		}
 		$('#initiative table tbody').html(htmlTbody);
 
+		//Init round 1 and set turn on first player
+		setRound();
 		setTurn();
 
 		idCreature++;
@@ -114,8 +123,11 @@ function resetIniForm() {
 	$('#initiative table tbody').html('');
 	tableIni = [];
 
+	// Reset round, turn and id
+	round = 1;
 	currentTurn = 0;
 	idCreature = 0;
+	setRound();
 
 	$('#form-ini input').eq(0).focus();
 }
@@ -149,6 +161,8 @@ function setTurn(reverse = false) {
 		currentTurn = tableRowLength-1;
 	} else if (currentTurn == tableRowLength) {
 		currentTurn = 0;
+		round++;
+		setRound();
 	}
 
 	$(tableRow).eq(currentTurn).addClass('info');
@@ -171,6 +185,11 @@ function setKey() {
 	});
 }
 
+/*
+ *	Update table with input HP and set class danger if < 0
+ *
+ *	@param input Selected input
+ */
 function setHP(input) {
 	// Get the position in table
 	var id = $(input).closest('tr').find('td').eq(0).text();
@@ -184,4 +203,24 @@ function setHP(input) {
 	} else {
 		$(input).closest('tr').removeClass('danger');
 	}
+}
+
+/*
+ *	Update table with note
+ *
+ *	@param input Selected input
+ */
+function setNote(input) {
+	var id = $(input).closest('tr').find('td').eq(0).text();
+	id = tableIni.length-id;
+	var note = $(input).val();
+
+	tableIni[id][6] = note;
+}
+
+/*
+ *	Display number of rounds
+ */
+function setRound() {
+	$('#round').children().text(round);
 }

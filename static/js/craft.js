@@ -78,8 +78,8 @@ function craft() {
 		if (result >= dd) {
 			// Success
 			// Calcul progression
-			var progressStep = round(((result*dd)/modifier)*multiplicator, 2);
-			var progressTotal = round(progress+progressStep, 2);
+			var progressStep = roundNb(((result*dd)/modifier)*multiplicator, 2);
+			var progressTotal = roundNb(progress+progressStep, 2);
 			$('#form-craft input').eq(3).val(progressTotal);
 
 			var rowClass = 'success';

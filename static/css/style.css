@@ -49,14 +49,22 @@ form {
 	padding: 5px;
 }
 
-.input-hp{
+#initiative table input {
 	margin-top: -5px;
+}
 
+.input-hp{
 	max-width: 40px;
 }
 
 #initiative table td>i {
 	display: none;
+}
+
+#round {
+	float: left;
+
+	font-weight: bold;
 }
 
 #prev-turn, #next-turn {
