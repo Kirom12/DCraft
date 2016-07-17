@@ -1,7 +1,7 @@
 /*
  *	@TODO
  *	Add second time name
- *	Add possibility to delete a row
+ *	Correct when deleting a row
  */
 
 // Global
@@ -29,6 +29,10 @@ $(function() {
 		// When modify note
 		$('.input-note').change(function() {
 			setNote(this);
+		});
+		// When delete a row
+		$('.delete-creature').on('click', function() {
+			deleteCreature(this);
 		});
 	});
 
@@ -90,7 +94,7 @@ function initiative() {
 		for (var i = tableIni.length-1; i >= 0; i--) {
 			// Set danger class if hp < 0
 			rowClass = (tableIni[i][4] < 0) ? ' class="danger"' : '';
-			htmlTbody += '<tr'+rowClass+'><td>'+(tableIni.length-i)+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td>'+tableIni[i][3]+'</td><td><input type="text" class="input-hp" value="'+tableIni[i][4]+'"></td><td>'+tableIni[i][5]+'</td><td><input type="text" class="input-note" value="'+tableIni[i][6]+'"></td></tr>';
+			htmlTbody += '<tr'+rowClass+'><td>'+(tableIni.length-i)+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td>'+tableIni[i][3]+'</td><td><input type="text" class="input-hp" value="'+tableIni[i][4]+'"></td><td>'+tableIni[i][5]+'</td><td><input type="text" class="input-note" value="'+tableIni[i][6]+'"></td><td><button type="button" class="delete-creature btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td></tr>';
 		}
 		$('#initiative table tbody').html(htmlTbody);
 
@@ -159,6 +163,8 @@ function setTurn(reverse = false) {
 	// If round is over
 	if (currentTurn == -1) {
 		currentTurn = tableRowLength-1;
+		round--;
+		setRound();
 	} else if (currentTurn == tableRowLength) {
 		currentTurn = 0;
 		round++;
@@ -192,8 +198,7 @@ function setKey() {
  */
 function setHP(input) {
 	// Get the position in table
-	var id = $(input).closest('tr').find('td').eq(0).text();
-	id = tableIni.length-id;
+	var id = getIdTable(input);
 	var hp = $(input).val();
 
 	tableIni[id][4] = hp;
@@ -211,11 +216,20 @@ function setHP(input) {
  *	@param input Selected input
  */
 function setNote(input) {
-	var id = $(input).closest('tr').find('td').eq(0).text();
-	id = tableIni.length-id;
+	var id = getIdTable(input);
 	var note = $(input).val();
 
 	tableIni[id][6] = note;
+}
+
+function deleteCreature (input) {
+	var id = getIdTable(input);
+
+	console.log(id);
+	
+	tableIni.splice(id,1);
+
+	$(input).closest('tr').remove();
 }
 
 /*
@@ -223,4 +237,17 @@ function setNote(input) {
  */
 function setRound() {
 	$('#round').children().text(round);
+}
+
+/*
+ *	Get id of a row from the current input
+ *
+ *	@param input
+ *	@return int id Current row of a the table
+ */
+function getIdTable(input) {
+	var id = $(input).closest('tr').find('td').eq(0).text();
+	id = tableIni.length-parseInt(id);
+
+	return id;
 }
