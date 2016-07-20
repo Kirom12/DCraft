@@ -61,6 +61,10 @@ form {
 	display: none;
 }
 
+.second-name {
+	display: none;
+}
+
 #round {
 	float: left;
 

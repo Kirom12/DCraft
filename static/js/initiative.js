@@ -1,6 +1,5 @@
 /*
  *	@TODO
- *	Add second time name
  *	Correct when deleting a row
  */
 
@@ -41,6 +40,7 @@ $(function() {
 		$(document).off('keydown');
 	});
 
+	// Turns
 	$('#next-turn').on('click', function() {
 		currentTurn++;
 		setTurn();
@@ -48,6 +48,11 @@ $(function() {
 	$('#prev-turn').on('click', function() {
 		currentTurn--;
 		setTurn(true);
+	});
+
+	// Show/Hide second name col
+	$('#display-name').on('click', function() {
+		toggleNameS(this);
 	});
 });
 
@@ -94,7 +99,7 @@ function initiative() {
 		for (var i = tableIni.length-1; i >= 0; i--) {
 			// Set danger class if hp < 0
 			rowClass = (tableIni[i][4] < 0) ? ' class="danger"' : '';
-			htmlTbody += '<tr'+rowClass+'><td>'+(tableIni.length-i)+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td>'+tableIni[i][3]+'</td><td><input type="text" class="input-hp" value="'+tableIni[i][4]+'"></td><td>'+tableIni[i][5]+'</td><td><input type="text" class="input-note" value="'+tableIni[i][6]+'"></td><td><button type="button" class="delete-creature btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td></tr>';
+			htmlTbody += '<tr'+rowClass+'><td>'+(tableIni.length-i)+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td>'+tableIni[i][3]+'</td><td><input type="text" class="input-hp" value="'+tableIni[i][4]+'"></td><td>'+tableIni[i][5]+'</td><td><input type="text" class="input-note" value="'+tableIni[i][6]+'"></td><td class="second-name">'+tableIni[i][1]+'</td><td><button type="button" class="delete-creature btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td></tr>';
 		}
 		$('#initiative table tbody').html(htmlTbody);
 
@@ -222,10 +227,9 @@ function setNote(input) {
 	tableIni[id][6] = note;
 }
 
+
 function deleteCreature (input) {
 	var id = getIdTable(input);
-
-	console.log(id);
 	
 	tableIni.splice(id,1);
 
@@ -250,4 +254,17 @@ function getIdTable(input) {
 	id = tableIni.length-parseInt(id);
 
 	return id;
+}
+
+/*
+ *	Show/Hide second name col
+ *
+ *	@param input Checkbox
+ */
+function toggleNameS(input) {
+	if ($(input).is(':checked')) {
+		$(".second-name").show();
+	} else {
+		$(".second-name").hide();
+	}
 }
