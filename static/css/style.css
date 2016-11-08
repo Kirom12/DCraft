@@ -36,7 +36,7 @@ form {
 #form-craft button{
 	margin: 5px 0px;
 }
-#form-craft button:last-of-type, #form-ini button:last-of-type{
+#form-craft button:last-of-type, #form-ini button:last-of-type, #form-encounter button:last-of-type{
 	margin: 5px 10px;
 }
 #form-craft #semi-auto {
@@ -61,7 +61,14 @@ form {
 	display: none;
 }
 
-.second-name {
+#initiative table select {
+	max-width: 70px;
+
+	padding: 3px 5px;
+	margin: 0px;
+}
+
+.table-second-name {
 	display: none;
 }
 

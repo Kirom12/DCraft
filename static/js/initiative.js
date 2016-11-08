@@ -11,28 +11,20 @@ var round = 1;
 var currentTurn = 0;
 var idCreature = 0; // not use for now
 
+var currentHideView = false;
+var currentHideColumn = [false, false];
+
+//Use for storage view
+var turnStorage = [];
+
 // jQuery
 $(function() {
-	// EVENTS
+	// ***EVENTS***
 	// Form submit
 	$('#form-ini').submit(function(e) {
 		e.preventDefault();
 
 		initiative();
-		setKey();
-
-		// When modify HP
-		$('.input-hp').change(function() {
-			setHP(this);
-		});
-		// When modify note
-		$('.input-note').change(function() {
-			setNote(this);
-		});
-		// When delete a row
-		$('.delete-creature').on('click', function() {
-			deleteCreature(this);
-		});
 	});
 
 	$('#refresh-ini').on('click', function() {
@@ -50,9 +42,18 @@ $(function() {
 		setTurn(true);
 	});
 
-	// Show/Hide second name col
-	$('#display-name').on('click', function() {
-		toggleNameS(this);
+	// **SHOW/HIDE**
+	$('#display-name').on('click',toggleNameS);
+
+	//Display minimal view
+	$('#minimal-view').on('click', toggleMinimalView);
+
+	$('#display-ca').on('click', function() {
+		toggleElement(".table-ca", false, 0,this);
+	});
+
+	$('#display-note').on('click', function() {
+		toggleElement(".table-note", false, 1,this);
 	});
 });
 
@@ -90,22 +91,14 @@ function initiative() {
 		// Add creature to the list
 		tableIni.push([idCreature,name,initiative,ca,maxHp,maxHp, note]);
 
-		// Sort all the table
-		tableIni = tableIni.sort(sortInitiative);
+		//Save in the storage for view event
+		saveInStorage("DCraft-tableIni", tableIni);
 
 		// Display the list
-		var rowClass;
-		var htmlTbody = '';
-		for (var i = tableIni.length-1; i >= 0; i--) {
-			// Set danger class if hp < 0
-			rowClass = (tableIni[i][4] < 0) ? ' class="danger"' : '';
-			htmlTbody += '<tr'+rowClass+'><td>'+(tableIni.length-i)+'</td><td>'+tableIni[i][1]+'</td><td>'+tableIni[i][2]+'</td><td>'+tableIni[i][3]+'</td><td><input type="text" class="input-hp" value="'+tableIni[i][4]+'"></td><td>'+tableIni[i][5]+'</td><td><input type="text" class="input-note" value="'+tableIni[i][6]+'"></td><td class="second-name">'+tableIni[i][1]+'</td><td><button type="button" class="delete-creature btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td></tr>';
-		}
-		$('#initiative table tbody').html(htmlTbody);
+		displayTable();
 
 		//Init round 1 and set turn on first player
 		setRound();
-		setTurn();
 
 		idCreature++;
 
@@ -113,6 +106,60 @@ function initiative() {
 		$('#form-ini input').eq(1).val('');
 		$('#form-ini input').eq(0).focus();
 	}
+}
+
+function addFormEvent() {
+	setKey();
+
+	$('#initiative select').change(function() {
+		modifyOrder(this);
+	});
+
+	// When modify HP
+	$('.input-hp').change(function() {
+		setHP(this);
+	});
+	// When modify note
+	$('.input-note').change(function() {
+		setNote(this);
+	});
+	// When delete a row
+	$('.delete-creature').on('click', function() {
+		deleteCreature(this);
+	});
+}
+
+function displayTable() {
+	var rowClass;
+	var htmlTbody = "";
+	var options = "";
+
+	// Sort all the table
+	tableIni = tableIni.sort(sortInitiative);
+
+	for (var i = 1; i < tableIni.length+1; i++) {
+		options += '<option value="'+i+'">'+i+'</option>';
+	}
+
+	for (var i = tableIni.length-1; i >= 0; i--) {
+		// Set danger class if hp < 0
+		rowClass = (tableIni[i][4] < 0) ? ' class="danger"' : '';
+		htmlTbody += '<tr'+rowClass+' data-id="'+(tableIni.length-i)+'">'+
+			'<td><select class=""><option value="'+(tableIni.length-i)+'">'+(tableIni.length-i)+'</option>'+options+'</select></td>'+
+			'<td>'+tableIni[i][1]+'</td>'+
+			'<td>'+tableIni[i][2]+'</td>'+
+			'<td class="table-ca">'+tableIni[i][3]+'</td>'+
+			'<td class="table-pv"><input type="text" class="input-hp" value="'+tableIni[i][4]+'"></td>'+
+			'<td class="table-pv-total">'+tableIni[i][5]+'</td>'+
+			'<td class="table-note"><input type="text" class="input-note" value="'+tableIni[i][6]+'"></td>'+
+			'<td class="table-second-name">'+tableIni[i][1]+'</td>'+
+			'<td class="table-delete"><button type="button" class="delete-creature btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i></button></td></tr>';
+	}
+	$('#initiative table tbody').html(htmlTbody);
+
+	setTurn();
+	addFormEvent();
+	updateDisplay();
 }
 
 /*
@@ -139,6 +186,9 @@ function resetIniForm() {
 	setRound();
 
 	$('#form-ini input').eq(0).focus();
+
+	//Update the view
+	saveInStorage("DCraft-tableIni", tableIni);
 }
 
 /*
@@ -147,14 +197,16 @@ function resetIniForm() {
  *	@param bool reverse Change the direction
  */
 function setTurn(reverse = false) {
+	//Save in storage
+	turnStorage = [currentTurn, reverse];
+	saveInStorage("DCraft-turn", turnStorage);
+
 	var tableRow = $('#initiative table tbody tr');
 	var tableRowLength = $(tableRow).length;
 
-	if (reverse) {
-		$(tableRow).eq(currentTurn+1).removeClass('info');
-	} else {
-		$(tableRow).eq(currentTurn-1).removeClass('info');
-	}
+	$(tableRow).each(function() {
+		$(this).removeClass('info');
+	});
 
 	// Skip turn if character is down
 	while($(tableRow).eq(currentTurn).find('.input-hp').val() < 0) {
@@ -196,6 +248,36 @@ function setKey() {
 	});
 }
 
+function modifyOrder(select) {
+	var newPosition = Math.abs(($(select).val())-tableIni.length);
+	var oldPosition =  Math.abs($(select).closest("tr").attr("data-id")-tableIni.length);
+
+	//console.log(oldPosition);
+	//console.log(newPosition);
+	//console.log($(select).val());
+
+	if (newPosition == oldPosition) {
+		return;
+	}
+
+	for (i = tableIni.length-1; i >= 0; i--) {
+		//console.log(tableIni[i][2]);
+		if (i == newPosition) {
+			if (newPosition <= oldPosition) {
+				tableIni[oldPosition][2] = roundNb(tableIni[i][2]-0.1, 1);
+			} else {
+				tableIni[oldPosition][2] = roundNb(tableIni[i][2]-0.1, 1);
+			}
+			
+			break;
+		}
+	}
+	displayTable();
+
+	//Update the view
+	saveInStorage("DCraft-tableIni", tableIni);
+}
+
 /*
  *	Update table with input HP and set class danger if < 0
  *
@@ -205,6 +287,9 @@ function setHP(input) {
 	// Get the position in table
 	var id = getIdTable(input);
 	var hp = $(input).val();
+
+	console.log(hp);
+	console.log(id);
 
 	tableIni[id][4] = hp;
 
@@ -227,13 +312,15 @@ function setNote(input) {
 	tableIni[id][6] = note;
 }
 
-
-function deleteCreature (input) {
+function deleteCreature(input) {
 	var id = getIdTable(input);
 	
 	tableIni.splice(id,1);
 
-	$(input).closest('tr').remove();
+	displayTable();
+
+	//Update the view
+	saveInStorage("DCraft-tableIni", tableIni);
 }
 
 /*
@@ -250,7 +337,7 @@ function setRound() {
  *	@return int id Current row of a the table
  */
 function getIdTable(input) {
-	var id = $(input).closest('tr').find('td').eq(0).text();
+	var id = $(input).closest("tr").attr("data-id");
 	id = tableIni.length-parseInt(id);
 
 	return id;
@@ -259,12 +346,57 @@ function getIdTable(input) {
 /*
  *	Show/Hide second name col
  *
- *	@param input Checkbox
  */
-function toggleNameS(input) {
-	if ($(input).is(':checked')) {
-		$(".second-name").show();
+function toggleNameS(defaultDisplay = false) {
+	if ($(this).is(":checked")) {
+		$(".table-second-name").show();
 	} else {
-		$(".second-name").hide();
+		$(".table-second-name").hide();
 	}
+}
+
+/*
+ *	Display only name n° and ini and hide form
+ */
+function toggleMinimalView(defaultDisplay = false) {
+	if (defaultDisplay === true || $(this).is(":checked")) {
+		currentHideView = true;
+		$(FORM_INI).hide();
+		$(".table-pv").hide();
+		$(".table-pv-total").hide();
+		$(".table-delete").hide();
+
+	} else {
+		currentHideView = false;
+		$(FORM_INI).show();
+		$(".table-pv").show();
+		$(".table-pv-total").show();
+		$(".table-delete").show();
+	}
+}
+
+/*
+ *	Show/Hide a element from intiative table
+ *
+ *	@param String className
+ *	@param Bool defaultDisplay Use for re-check element display when the table is reload
+ */
+function toggleElement(className, defaultDisplay = false, pos,currentClick = false) {
+	if (defaultDisplay === true || $(currentClick).is(":checked")) {
+		currentHideColumn[pos] = true;
+		$(className).hide();
+	} else {
+		currentHideColumn[pos] = false;
+		$(className).show();
+	}
+}
+
+/*
+ *	Rehide element when recreate the table
+ *
+ */
+function updateDisplay() {
+	toggleMinimalView(currentHideView);
+	toggleElement(".table-ca", currentHideColumn[0], 0);
+	toggleElement(".table-note", currentHideColumn[1], 1);
 }

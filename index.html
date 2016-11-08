@@ -13,7 +13,8 @@
 	    <div class="container">
 	    	<ul id="tab-menu" class="nav nav-tabs">
 				<li><a href="#craft" aria-controles="craft" data-toggle="tab">Artisanat</a></li>
-				<li  class="active"><a href="#initiative" aria-controles="craft" data-toggle="tab">Initiative</a></li>
+				<li class="active"><a href="#initiative" aria-controles="craft" data-toggle="tab">Initiative</a></li>
+				<li><a href="#encounter" aria-controles="craft" data-toggle="tab">Rencontres</a></li>
 			</ul>
 			
 			<div class="tab-content">
@@ -27,14 +28,14 @@
 								<div class="input-group-addon">D20</div>
 								<input type="text" class="form-control input-text" id="result"  maxlength="2" autofocus/>
 							</div>
-							<label class="sr-only" for="bonus">Bonus</label>
+							<label class="sr-only" for="bonus">Bonus*</label>
 							<div class="input-group">
-								<div class="input-group-addon">Bonus</div>
+								<div class="input-group-addon">Bonus*</div>
 								<input type="text" class="form-control input-text" id="bonus"  maxlength="2"/>
 							</div>
-							<label class="sr-only" for="dd">DD</label>
+							<label class="sr-only" for="dd">DD*</label>
 							<div class="input-group">
-								<div class="input-group-addon">DD</div>
+								<div class="input-group-addon">DD*</div>
 								<input type="text" class="form-control input-text" id="dd" maxlength="2"/>
 							</div>
 							<label class="sr-only" for="Price">Progres</label>
@@ -43,9 +44,9 @@
 								<input type="text" class="form-control input-text" id="price" value="0"/>
 								<div class="input-group-addon">PO</div>
 							</div>
-							<label class="sr-only" for="Price">Prix</label>
+							<label class="sr-only" for="Price">Prix*</label>
 							<div class="input-group">
-								<div class="input-group-addon">Prix</div>
+								<div class="input-group-addon">Prix*</div>
 								<input type="text" class="form-control input-text" id="price"/>
 								<div class="input-group-addon">PO</div>
 							</div>
@@ -102,9 +103,9 @@
 
 					<form name="formIni" id="form-ini" class="form-inline" action="#" method="POST">
 						<div class="form-group">
-							<label class="sr-only" for="creatureName">Nom</label>
+							<label class="sr-only" for="creatureName">Nom*</label>
 							<div class="input-group">
-								<div class="input-group-addon">Nom</div>
+								<div class="input-group-addon">Nom*</div>
 								<input type="text" class="form-control" id="creatureName" autofocus/>
 							</div>
 							<label class="sr-only" for="roll">Jet</label>
@@ -142,7 +143,22 @@
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" id="display-name" value="1">
-							Display name
+							Display name 2
+						</label>
+						|
+						<label>
+							<input type="checkbox" id="minimal-view" value="1">
+							Minimal view
+						</label>
+						|
+						<label>
+							<input type="checkbox" id="display-ca" value="1">
+							Hide CA
+						</label>
+						|
+						<label>
+							<input type="checkbox" id="display-note" value="1">
+							Hide note
 						</label>
 					</div>
 					<table class="table table-striped">
@@ -151,12 +167,132 @@
 								<th>n°</th>
 								<th>Nom</th>
 								<th>Ini</th>
-								<th>CA</th>
-								<th>PV</th>
-								<th>PV Total</th>
-								<th>Note</th>
-								<th class="second-name">Nom</th>
-								<th></th>
+								<th class="table-ca">CA</th>
+								<th class="table-pv">PV</th>
+								<th class="table-pv-total">PV Total</th>
+								<th class="table-note">Note</th>
+								<th class="table-second-name">Nom</th>
+								<th class="table-delete"></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="tab-pane text-center" id="encounter">
+					<h2>Rencontres</h2>
+
+					<form name="formEncounter" id="form-encounter" action="#" method="POST">
+						<div class="form-group form-inline">
+							<label class="sr-only" for="bonusEncounter">Bonus</label>
+							<div class="input-group">
+								<div class="input-group-addon">Bonus</div>
+								<input type="text" class="form-control input-text" id="bonusEncounter"  maxlength="3" autofocus/>
+							</div>
+							<label class="sr-only" for="modificatorEncounter">Mod</label>
+							<div class="input-group">
+								<div class="input-group-addon">Mod</div>
+								<input type="text" class="form-control input-text" id="modificatorEncounter"  maxlength="3"/>
+							</div>
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" name="night">
+									Nuit
+								</label>
+							</div>
+						</div>
+						<div class="form-group form-inline">
+							<label class="sr-only" for="modAmuseur">Mod Amuseurs</label>
+							<div class="input-group">
+								<div class="input-group-addon">Mod Amuseurs</div>
+								<input type="text" class="form-control input-text" id="modAmuseurs"  maxlength="3" autofocus/>
+							</div>
+							<label class="sr-only" for="modVoyageur">Mod Voyageurs</label>
+							<div class="input-group">
+								<div class="input-group-addon">Mod Voyageurs</div>
+								<input type="text" class="form-control input-text" id="modVoyageur"  maxlength="3"/>
+							</div>
+							<label class="sr-only" for="modPatrouille">Mod Patrouille</label>
+							<div class="input-group">
+								<div class="input-group-addon">Mod Patrouille</div>
+								<input type="text" class="form-control input-text" id="modPatrouille"  maxlength="3"/>
+							</div>
+							<label class="sr-only" for="modCriminel">Mod Criminels</label>
+							<div class="input-group">
+								<div class="input-group-addon">Mod Criminels</div>
+								<input type="text" class="form-control input-text" id="modCriminel"  maxlength="3"/>
+							</div>	
+						</div>
+						<div class="form-group">
+							<div class="radio">
+								<label>
+									<input type="radio" name="opZone" id="optZone1" value="5"/>
+	    							Terres désolée/abandonnée (5%/h)
+								</label>
+								<label>
+									<input type="radio" name="opZone" id="optZone2" value="8" checked/>
+	    							Frontalières/Contrées sauvages (8%/h)
+								</label>
+								<label>
+									<input type="radio" name="opZone" id="optZone3" value="10"/>
+	    							Verdoyante/Civilisée (10%/h)
+								</label>
+								<label>
+									<input type="radio" name="opZone" id="optZone4" value="12"/>
+	    							Très fréquentée (12%/h)
+								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="radio">
+								<label>
+									<input type="radio" name="opRoad" id="optRoad3" value="0"/>
+	    							Sauvage (0)
+								</label>
+								<label>
+									<input type="radio" name="opRoad" id="optRoad2" value="2" checked/>
+	    							Route peu fréquenté (+2)
+								</label>
+								<label>
+									<input type="radio" name="opRoad" id="optRoad1" value="4"/>
+	    							Route fréquentée (+4)
+								</label>
+							</div>
+						</div>
+						<div class="form-group" id="modificator">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" name="notMoving" value="2">
+									Ne bougeant pas (+2)
+								</label>
+							</div>
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" name="horse" value="-2">
+									En mouvement à cheval (-2)
+								</label>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<button type="button" id="enc-24h" class="btn btn-primary" value="24">24h</button>
+							<button type="submit" class="btn btn-primary">12h(Defaut)</button>
+							<button type="button" id="enc-8h" class="btn btn-primary" value="8">8h</button>
+							<button type="button" id="enc-4h" class="btn btn-primary" value="4">4h</button>
+							<button type="button" id="enc-1h" class="btn btn-primary" value="1">1h</button>
+							<button type="button" id="refresh-encounter" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i></button>
+						</div>
+					</form>
+
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>H</th>
+								<th>Jet</th>
+								<th>%</th>
+								<th>Type</th>
+								<th>ND</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -169,7 +305,10 @@
 		<script type="text/javascript" src="static/js/jquery.js"></script>
 		<script type="text/javascript" src="static/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="static/js/common.js"></script>
+		<script type="text/javascript" src="static/js/main.js"></script>
 		<script type="text/javascript" src="static/js/craft.js"></script>
 		<script type="text/javascript" src="static/js/initiative.js"></script>
+		<script type="text/javascript" src="static/js/initiative-view.js"></script>
+		<script type="text/javascript" src="static/js/encounter.js"></script>
 	</body>
 </html> 

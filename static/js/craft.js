@@ -1,6 +1,9 @@
 /*
  *	@TODO
  *	Save every craft (in local storage)
+ *
+ *	Encounter system
+ *	Save active tab
  */
 
 //Variables'global'

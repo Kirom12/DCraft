@@ -63,6 +63,17 @@ function getInputValue(form, limit) {
 }
 
 /*
+ *	Save a value in the local storage. Remove for trigger the storage event
+ *
+ *	@param String name
+ *	@param Array value
+ */
+function saveInStorage(name, value) {
+	localStorage.removeItem(name);
+	localStorage.setItem(name, JSON.stringify(value));
+}
+
+/*
  *	Round a number
  *
  *	@param Float value number to round
@@ -74,10 +85,16 @@ function roundNb(value, decimals) {
 }
 
 /*
- *	Return number between 1 and 20
+ *	Return random number
  */
+ function d6() {
+	return Math.round(Math.random()*(6 - 1)+1);
+}
 function d20() {
-	return roundNb(Math.random()*(20 - 1)+1, 0);
+	return Math.round(Math.random()*(20 - 1)+1);
+}
+function d100() {
+	return Math.round(Math.random()*(100 - 1)+1);
 }
 
 /*
